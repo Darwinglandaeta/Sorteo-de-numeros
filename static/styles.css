@@ -1,0 +1,335 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom right, #e0f7fa, #80deea);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+    text-align: center;
+}
+
+h1 {
+    color: #00796b;
+    margin-bottom: 20px;
+    font-size: 3rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#numero {
+    font-size: 6rem;
+    color: #e94e77;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#mensaje {
+    font-size: 2rem;
+    color: #00796b;
+    margin-top: 20px;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    color: white;
+    background-color: #00796b;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #004d40;
+    transform: translateY(-2px) scale(1.05);
+}
+
+input {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 10px 0;
+    width: 250px;
+    border: 2px solid #00796b;
+    border-radius: 25px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #004d40;
+    box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+}
+
+#modal, #modalFechas, .modal-reservas {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#modalContent, #modalContentFechas, .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+#modalContent.show, #modalContentFechas.show, .modal-content.show {
+    transform: scale(1.05);
+}
+
+.reservasContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.reserva {
+    margin: 10px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.reserva:hover {
+    transform: scale(1.1);
+}
+
+.reservado {
+    background-color: #e94e77;
+}
+
+.disponible {
+    background-color: #4caf50;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.spin {
+    animation: spin 3s ease-in-out forwards;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg); }
+}
+
+.bounce {
+    animation: bounce 0.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.sorteo {
+    margin: 10px 0;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom right, #e0f7fa, #80deea);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+    text-align: center;
+}
+
+h1 {
+    color: #00796b;
+    margin-bottom: 20px;
+    font-size: 3rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#numero {
+    font-size: 6rem;
+    color: #e94e77;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#mensaje {
+    font-size: 2rem;
+    color: #00796b;
+    margin-top: 20px;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    color: white;
+    background-color: #00796b;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #004d40;
+    transform: translateY(-2px) scale(1.05);
+}
+
+input {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 10px 0;
+    width: 250px;
+    border: 2px solid #00796b;
+    border-radius: 25px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #004d40;
+    box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+}
+
+#modal, #modalFechas, .modal-reservas {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#modalContent, #modalContentFechas, .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+#modalContent.show, #modalContentFechas.show, .modal-content.show {
+    transform: scale(1.05);
+}
+
+.reservasContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.reserva {
+    margin: 10px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.reserva:hover {
+    transform: scale(1.1);
+}
+
+.reservado {
+    background-color: #e94e77;
+}
+
+.disponible {
+    background-color: #4caf50;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.spin {
+    animation: spin 3s ease-in-out forwards;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg); }
+}
+
+.bounce {
+    animation: bounce 0.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.sorteo {
+    margin: 10px 0;
+}
+
+/* Estilo para el indicador de carga */
+#loading {
+    font-size: 1.5rem;
+    color: #00796b;
+    margin-top: 20px;
+}

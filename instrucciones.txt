@@ -1,0 +1,7 @@
+Instalar!!!!
+pip install Flask
+
+
+Para ejecutar abrir desde el directorio raíz 
+python app.py
+

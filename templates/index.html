@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteo de Numeros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Sorteo de Numeros</h1>
+    
+    <input type="text" id="nombre" placeholder="Ingresa tu nombre" />
+    <input type="number" id="numeroReservado" placeholder="Numero (0-99)" min="0" max="99" />
+    <button onclick="registrarReserva()">Reservar Numero</button>
+    <button onclick="mostrarReservas()">Mostrar Reservas</button>
+
+    <div id="numero">00</div>
+    <button id="sorteoButton" onclick="realizarSorteo()">¡Sortea un Numero!</button>
+    
+    <button onclick="mostrarModalFechas()">Sorteos Realizados</button>
+    
+    <div id="mensaje">El numero ganador es:</div>
+
+    <div id="modal" style="display:none;">
+        <div id="modalContent">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <h2>Reservas y Sorteos Realizados</h2>
+            <div class="reservasContainer" id="reservasLista"></div>
+        </div>
+    </div>
+
+    <div id="modalFechas">
+        <div id="modalContentFechas">
+            <span class="close" onclick="cerrarModalFechas()">&times;</span>
+            <h2>Sorteos Realizados</h2>
+            <div id="sorteosLista"></div>
+        </div>
+    </div>
+
+    <div class="modal-reservas" id="modalReservas">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModalReservas()">&times;</span>
+            <h3 id="tituloReservas"></h3>
+            <div id="reservasPorSorteoLista"></div>
+        </div>
+    </div>
+
+    <div id="loading" style="display:none;">Cargando...</div>
+
+    <div id="fechaHora" style="margin-top: 20px; font-size: 1.2rem;"></div> 
+
+    <script>
+        function mostrarLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function ocultarLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function registrarReserva() {
+            const nombre = document.getElementById('nombre').value;
+            const numero = parseInt(document.getElementById('numeroReservado').value);
+
+            if (!nombre || isNaN(numero)) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            mostrarLoading();
+            fetch('/registrar_reserva', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `nombre=${nombre}&numero=${numero}`
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => alert('Error: ' + error.message))
+            .finally(ocultarLoading);
+        }
+
+        function mostrarReservas() {
+            mostrarLoading();
+            fetch('/mostrar_reservas')
+            .then(response => response.json())
+            .then(data => {
+                const reservasLista = document.getElementById('reservasLista');
+                reservasLista.innerHTML = '';
+                for (let i = 0; i < 100; i++) {
+                    const reservaDiv = document.createElement('div');
+                    reservaDiv.className = 'reserva ' + (data[i] ? 'reservado' : 'disponible');
+                    reservaDiv.innerText = data[i] ? data[i] : (i < 10 ? '0' + i : i);
+                    reservasLista.appendChild(reservaDiv);
+                }
+                document.getElementById('modal').style.display = 'block';
+            })
+            .finally(ocultarLoading);
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function mostrarModalFechas() {
+            mostrarLoading();
+            fetch('/mostrar_sorteos')
+            .then(response => response.json())
+            .then(sorteos => {
+                const sorteosLista = document.getElementById('sorteosLista');
+                sorteosLista.innerHTML = '';
+
+                sorteos.forEach(sorteo => {
+                    const sorteoDiv = document.createElement('div');
+                    sorteoDiv.className = 'sorteo';
+                    sorteoDiv.innerText = `Numero: ${sorteo[1]} | Ganador: ${sorteo[2] || 'Nadie'} | Fecha: ${sorteo[3]}`;
+                    sorteosLista.appendChild(sorteoDiv);
+                });
+
+                document.getElementById('modalFechas').style.display = 'block';
+            })
+            .finally(ocultarLoading);
+        }
+
+        function cerrarModalFechas() {
+            document.getElementById('modalFechas').style.display = 'none';
+        }
+
+        function cerrarModalReservas() {
+            document.getElementById('modalReservas').style.display = 'none';
+        }
+
+        function realizarSorteo() {
+            mostrarLoading();
+            fetch('/realizar_sorteo')
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                } else {
+                    const numeroDiv = document.getElementById('numero');
+                    const mensajeDiv = document.getElementById('mensaje');
+                    let contador = 0;
+                    mensajeDiv.style.opacity = 0;
+
+                    numeroDiv.classList.add('spin', 'bounce');
+
+                    const intervalo = setInterval(() => {
+                        contador = Math.floor(Math.random() * 100);
+                        const numeroFormateado = contador < 10 ? '0' + contador : contador;
+                        numeroDiv.innerText = numeroFormateado;
+                    }, 100);
+
+                    setTimeout(() => {
+                        clearInterval(intervalo);
+                        numeroDiv.classList.remove('spin', 'bounce'); 
+                        const numeroGanador = data.numero;
+                        const numeroGanadorFormateado = numeroGanador < 10 ? '0' + numeroGanador : numeroGanador;
+
+                        if (data.ganador) {
+                            const ganadorNombre = data.ganador;
+                            numeroDiv.innerText = numeroGanadorFormateado;
+                            mensajeDiv.innerText = "El numero ganador es: " + numeroGanadorFormateado + " - " + ganadorNombre;
+                        } else {
+                            numeroDiv.innerText = numeroGanadorFormateado;
+                            mensajeDiv.innerText = "El numero ganador es: " + numeroGanadorFormateado + " - No hay ganador.";
+                        }
+                        mensajeDiv.style.opacity = 1;
+                    }, 5000); 
+                }
+            })
+            .finally(ocultarLoading);
+        }
+
+        function mostrarFechaHora() {
+            const fechaHoraDiv = document.getElementById('fechaHora');
+            const ahora = new Date();
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            fechaHoraDiv.innerText = ahora.toLocaleString('es-ES', opciones);
+        }
+
+        mostrarFechaHora();
+        setInterval(mostrarFechaHora, 1000);
+    </script>
+</body>
+</html>
